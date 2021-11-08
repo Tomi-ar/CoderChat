@@ -5,13 +5,14 @@ const fs = require("fs");
 const router = new Router();
 
 router.get("/", (req, res) => {
-    fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {
-        let dataFile = JSON.parse(data)
-        let items = dataFile.length;
-        let check = false;
-        items === 0 ? check = true : check = false;
-        res.render("productos", {data: dataFile, check: check});            
-    })
+    // fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {
+    //     let dataFile = JSON.parse(data)
+    //     let items = dataFile.length;
+    //     let check = false;
+    //     items === 0 ? check = true : check = false;
+    //     res.render("productos", {data: dataFile, check: check});            
+    // })
+    res.render("productos")
 })
 
 router.post("/", (req, res) => {

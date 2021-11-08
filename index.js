@@ -35,9 +35,15 @@ const io = new Server(server)
 //Conexion Socket
 io.on("connection", (socket) => {
     console.log("Cliente conectado");
-    fs.readFile("./db/Comms", "utf-8", (err,data) => {
-        let info = JSON.parse(data);})
-    socket.emit("message_rta", info);
+    fs.readFile("../db/Comms", "utf-8", (err,data) => {
+        let info = JSON.parse(data);
+        socket.emit("message_rta", info)
+    })
+    fs.readFile("../db/arrProds", "utf-8", (err,data) => {
+        let info = JSON.parse(data);
+        socket.emit("arrUpdated", info)
+    })
+
     
     socket.on("dataText", (dataObj) => {
         fs.readFile("./db/Comms", "utf-8", (err,data) => {

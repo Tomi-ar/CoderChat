@@ -28,35 +28,35 @@ const addMessage = () => {
 
 
 
-// const addProd = () => {
-//     let dataObj = {
-//         nombre: document.querySelector("#nombre").value,
-//         precio: document.querySelector("#precio").value,
-//         thumb: document.querySelector("#thumb").value
-//     }
-//     console.log(dataObj);
-//     socket.emit("newProd", dataObj)
-//     document.querySelector("#nombre").value = "";
-//     document.querySelector("#precio").value = "";
-//     document.querySelector("#thumb").value = "";
+const addProd = () => {
+    let dataObj = {
+        nombre: document.querySelector("#nombre").value,
+        precio: document.querySelector("#precio").value,
+        thumb: document.querySelector("#thumb").value
+    }
+    console.log(dataObj);
+    socket.emit("newProd", dataObj)
+    document.querySelector("#nombre").value = "";
+    document.querySelector("#precio").value = "";
+    document.querySelector("#thumb").value = "";
 
-//     return false;
-// }
+    return false;
+}
 
-// socket.on("arrUpdated", (dataObj) => {
-//     console.log(dataObj);
-//     updateTable(dataObj);
-//     socket.emit("updateConfirm", "Tabla actualizada")
-// })
+socket.on("arrUpdated", (dataObj) => {
+    console.log(dataObj);
+    updateTable(dataObj);
+    socket.emit("updateConfirm", "Tabla actualizada")
+})
 
 
-// const updateTable = (data) => {
-//     let html = data.map(x => {
-//         return `<tr>
-//                     <td>${x.nombre}</td>
-//                     <td>${x.precio}</td>
-//                     <td>${x.thumb}</td>
-//                 </tr>`
-//     })
-//     document.querySelector("#tableProds").innerHTML = html;
-// }
+const updateTable = (data) => {
+    let html = data.map(x => {
+        return `<tr>
+                    <td>${x.nombre}</td>
+                    <td>${x.precio}</td>
+                    <td>${x.thumb}</td>
+                </tr>`
+    })
+    document.querySelector("#tableProds").innerHTML = html;
+}
