@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="container">
+    <h2 class="text-center">Carga de productos</h2>
+    <form action="/productos" method="post">
+        <div class="form row mt-3 justify-content-center text-center border border-primary">
+            <div class="col-12 col-md-6">
+                <div class="my-3">
+                    <label class="input">Nombre</label>
+                    <input type="text" name="nombre" id="nombre">
+                </div>
+                <div class="my-3">
+                    <label class="input">Precio</label>
+                    <input type="number" name="precio" id="precio">
+                </div>
+                <div class="my-3">
+                    <label class="input">Link</label>
+                    <input type="text" name="thumb" id="thumb">
+                </div>                
+                <input class="btn btn-primary my-3" type="submit" value="Enviar"> 
+                <a class="btn btn-warning" role="button" href="/">Volver al inicio</a>
+            </div>
+        </div>
+    </form>
+</div>
+    <h2>Lista de productos con Hbs</h2>
+        {{#if check}}
+        <h3 class="p-3">No se encontraron productos :(</h3>
+        {{else}}
+            <div className="container">
+                <table className="text-center">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableProds">
+                        {{#each data}}
+                            <tr>
+                                <td>{{this.nombre}}</td>
+                                <td>{{this.precio}}</td>
+                                <td>
+                                    <img src={{this.thumb}} alt="foto del prod" className="ml-0" height="60px"/>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{/if}}
+       
+    <a class="btn btn-warning" role="button" href="/">Volver al inicio</a>
+</div>
+<div>
+    <h2>Centro de mensajes</h2>
+    <form onsubmit="return addMessage(this)">
+        <input type="email" id="email" placeholder="Tu email" name="email" >
+        <input type="text" id="text" placeholder="Cuéntanos algo..." name="text">
+        <input type="submit" value="Enviar">
+    </form>
+
+    <div id="contenedor">
+
+    </div>
+</div>
