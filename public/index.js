@@ -10,7 +10,11 @@ socket.on("message_rta", (data) => {
 // FUNCION PARA RENDERIZAR LOS MENSAJES
 const render = (data) => {
     let html = data.map(x => {
-        return `<p><strong>${x.email}:</strong> ${x.text}</p>`
+        return `<div class="comentarios">
+                    <p class="email">${x.email} </p>
+                    <p class="date">[${x.dateTime}]: </p>
+                    <p class="text">${x.text}</p>
+                </div>`
     }).join(" ");
     document.querySelector("#contenedor").innerHTML = html;
 }
@@ -22,8 +26,7 @@ const addMessage = () => {
         text: document.querySelector("#text").value
     }
     console.log(dataObj);
-    socket.emit("dataText", dataObj)
-    document.querySelector("#email").value = "";
+    socket.emit("dataText", dataObj);
     document.querySelector("#text").value = "";
 
     return false;

@@ -3,6 +3,7 @@ const app = express();
 const router = require("./routes/productos");
 const handlebars = require('express-handlebars');
 const fs = require("fs");
+var moment = require("moment")
 
 // Server
 const http = require("http")
@@ -47,8 +48,10 @@ io.on("connection", (socket) => {
     socket.on("dataText", (dataObj) => {
         fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
             let dataFile = JSON.parse(data);
+            let newDateTime = moment().format("DD/MM/YYYY HH:mm:ss");
             let newCom = {
                 email: dataObj.email,
+                dateTime: newDateTime,
                 text: dataObj.text
             }
             dataFile.push(newCom);

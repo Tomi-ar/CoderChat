@@ -1,0 +1,16 @@
+.comentarios p {
+    display: inline-block;
+}
+
+.email {
+    color: blue;
+    font-weight: bold;
+}
+
+.date {
+    color: rgb(163, 87, 51);
+}
+
+.text {
+    color: green;
+}
