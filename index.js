@@ -27,26 +27,25 @@ app.engine(
     })
 )
 
-
 // Socket
 const { Server } = require("socket.io")
 const io = new Server(server)
+app.use(express.static(__dirname+"/public"))
 
 //Conexion Socket
 io.on("connection", (socket) => {
     console.log("Cliente conectado");
-    fs.readFile("../db/Comms", "utf-8", (err,data) => {
+    fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
         let info = JSON.parse(data);
         socket.emit("message_rta", info)
     })
-    fs.readFile("../db/arrProds", "utf-8", (err,data) => {
+    fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {
         let info = JSON.parse(data);
         socket.emit("arrUpdated", info)
     })
-
-    
+   
     socket.on("dataText", (dataObj) => {
-        fs.readFile("./db/Comms", "utf-8", (err,data) => {
+        fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
             let dataFile = JSON.parse(data);
             let newCom = {
                 email: dataObj.email,
@@ -54,27 +53,19 @@ io.on("connection", (socket) => {
             }
             dataFile.push(newCom);
             console.log(dataFile);
-            fs.writeFile("./db/Comms", JSON.stringify(dataFile), (err) => {
+            fs.writeFile("./db/Comms.txt", JSON.stringify(dataFile), (err) => {
                 console.log("Comentario guardado");
                 io.sockets.emit("message_rta", dataFile)
             })
         })
     })
       
-
     socket.on("mensaje_cliente", (data) =>{
         console.log(data);
     })
 
-    //Escuchasr chat cliente
-    socket.on("dataText", (data) => {
-        msn.push(data);
-        console.log(msn);
-        io.sockets.emit("mensaje_rta", msn)
-    })
-
     socket.on("newProd", (dataObj) => {
-        fs.readFile("../db/arrProds", "utf-8", (err,data) => {
+        fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {
             let dataFile = JSON.parse(data)
             let items = dataFile.length;
             let id = parseInt(dataFile[items - 1].id) + 1;
@@ -87,15 +78,14 @@ io.on("connection", (socket) => {
             
             dataFile.push(newProd)
             console.log(dataFile);
-            fs.writeFile("../db/arrProds.txt", JSON.stringify(dataFile, null, 2), (err,data) =>{
+            fs.writeFile("./db/arrProds.txt", JSON.stringify(dataFile, null, 2), (err,data) =>{
                 console.log("Producto guardado!");
                 io.sockets.emit("arrUpdated", dataFile)
-                // res.render("productos", {data: dataFile});            
             })
         })
     })
     socket.on("updateConfirm", () => {
-        console.log("actualizado");
+        console.log("Actualizado");
     })
 })
 // Rutas

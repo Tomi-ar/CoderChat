@@ -16,5 +16,29 @@
     "precio": "1234",
     "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/03/colorado-ithaca_600ml.png",
     "id": 3
+  },
+  {
+    "nombre": "prueba2",
+    "precio": "456",
+    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/11/colorado-ribeirao_600ml.png",
+    "id": 4
+  },
+  {
+    "nombre": "prueba3",
+    "precio": "165",
+    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/03/colorado-ithaca_600ml.png",
+    "id": "5"
+  },
+  {
+    "nombre": "holas",
+    "precio": "13",
+    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/03/colorado-ithaca_600ml.png",
+    "id": 6
+  },
+  {
+    "nombre": "sadf",
+    "precio": "5546",
+    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/11/colorado-ribeirao_600ml.png",
+    "id": 7
   }
 ]

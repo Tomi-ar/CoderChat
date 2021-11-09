@@ -1,7 +1,7 @@
 <div class="container">
     <div class="container">
     <h2 class="text-center">Carga de productos</h2>
-    <form action="/productos" method="post">
+    <form action="" onsubmit="return addProd()">
         <div class="form row mt-3 justify-content-center text-center border border-primary">
             <div class="col-12 col-md-6">
                 <div class="my-3">
@@ -36,15 +36,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableProds">
-                        {{#each data}}
-                            <tr>
-                                <td>{{this.nombre}}</td>
-                                <td>{{this.precio}}</td>
-                                <td>
-                                    <img src={{this.thumb}} alt="foto del prod" className="ml-0" height="60px"/>
-                                </td>
-                            </tr>
-                        {{/each}}
+
                     </tbody>
                 </table>
             </div>
