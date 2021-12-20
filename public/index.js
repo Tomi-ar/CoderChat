@@ -9,20 +9,29 @@ socket.on("message_rta", (data) => {
 
 // FUNCION PARA RENDERIZAR LOS MENSAJES
 const render = (data) => {
+
+    // Aca tengo que desnormalizar el objeto y representarlo - ademas compararlo con el otro formato.
+
     let html = data.map(x => {
         return `<div class="comentarios">
-                    <p class="email">${x.email} </p>
+                    <p class="email">${x.author} </p>
                     <p class="date">[${x.dateTime}]: </p>
                     <p class="text">${x.text}</p>
                 </div>`
     }).join(" ");
     document.querySelector("#contenedor").innerHTML = html;
+    console.log(data);
 }
 
 // FUNCION PARA CAPTURAR LOS MENSAJES NUEVOS Y ENVIARLOS AL SERVER
 const addMessage = () => {
     let dataObj = {
-        email: document.querySelector("#email").value,
+        id: document.querySelector("#email").value,
+        name: document.querySelector("#name").value,
+        lastname: document.querySelector("#lastname").value,
+        age: document.querySelector("#age").value,
+        alias: document.querySelector("#alias").value,
+        avatar: document.querySelector("#avatar").value,
         text: document.querySelector("#text").value
     }
     console.log(dataObj);

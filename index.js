@@ -50,14 +50,25 @@ io.on("connection", (socket) => {
             let dataFile = JSON.parse(data);
             let newDateTime = moment().format("DD/MM/YYYY HH:mm:ss");
             let newCom = {
-                email: dataObj.email,
-                dateTime: newDateTime,
-                text: dataObj.text
+                author: {
+                    id: dataObj.id,
+                    nombre: dataObj.name,
+                    apellido: dataObj.lastname,
+                    edad: dataObj.age,
+                    alias: dataObj.alias,
+                    avatar: dataObj.avatar
+                },
+                text: dataObj.text,
+                dateTime: newDateTime
             }
+
             dataFile.push(newCom);
             console.log(dataFile);
             fs.writeFile("./db/Comms.txt", JSON.stringify(dataFile), (err) => {
                 console.log("Comentario guardado");
+
+                // Aca tengo que normalizar la respuesta y enviarla de las dos formas.
+
                 io.sockets.emit("message_rta", dataFile)
             })
         })

@@ -47,9 +47,14 @@
 <div class="container mt-3">
     <h2>Centro de mensajes</h2>
     <form onsubmit="return addMessage(this)">
-        <input type="email" id="email" placeholder="Tu email" name="email" >
-        <input type="text" id="text" placeholder="Cuéntanos algo..." name="text">
-        <input type="submit" value="Enviar">
+        <input type="email" id="email" placeholder="Tu email" name="email" class="d-block">
+        <input type="text" id="name" placeholder="Tu nombre" name="name" class="d-block mt-2">
+        <input type="text" id="lastname" placeholder="Tu apellido" name="lastname" class="d-block mt-2">
+        <input type="text" id="age" placeholder="Tu edad" name="age" class="d-block mt-2">
+        <input type="text" id="alias" placeholder="Tu alias" name="alias" class="d-block mt-2">
+        <input type="url" id="avatar" placeholder="Tu avatar" name="avatar" class="d-block mt-2">
+        <input type="text" id="text" placeholder="Cuéntanos algo..." name="text" class="d-block mt-2">
+        <input type="submit" value="Enviar" class="mt-2">
     </form>
 
     <div id="contenedor">
