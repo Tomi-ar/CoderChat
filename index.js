@@ -7,8 +7,8 @@ const fs = require("fs");
 var moment = require("moment")
 
 // Requiero para el normalizado
-// const { normalize, schema } = require('normalizr');
-// const dataMsg = require('./db/arrProds.txt');
+const { normalize, schema } = require('normalizr');
+const dataMsg = require('./db/arrProds.txt');
 
 // Server
 const http = require("http")
@@ -58,13 +58,20 @@ const createFaker = async () => {
 createFaker();
 
 // Normalizacion de mensajes
+const authorSchema = new schema.Entity("autor", {}, { idAttribute: "id" });
+const msjSchema = new schema.Entity("mensaje", {author: authorSchema}, { idAttribute: "dateTime" });
+const postSchema= new schema.Entity('post', { mensajes: [msjSchema] }, { idAttribute: 'id' })
+
 
 //Conexion) Socket
 io.on("connection", (socket) => {
     console.log("Cliente conectado");
     fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
         let info = JSON.parse(data);
-        socket.emit("message_rta", info.mensajes)
+        const normalized = normalize(info, postSchema);
+        // console.log(JSON.stringify(normalized).length);
+        // console.log(data.length)
+        socket.emit("message_rta_normlz", normalized)
     })
     fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {        
         let info = JSON.parse(data);
@@ -94,9 +101,8 @@ io.on("connection", (socket) => {
             fs.writeFile("./db/Comms.txt", JSON.stringify(dataFile, null, 2), (err) => {
                 console.log("Comentario guardado");
 
-                // Aca tengo que normalizar la respuesta y enviarla de las dos formas.
-
-                io.sockets.emit("message_rta", dataFile.mensajes)
+                const normalized = normalize(dataFile, postSchema);
+                io.sockets.emit("message_rta_normlz", normalized)
             })
         })
     })

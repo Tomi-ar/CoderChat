@@ -1,10 +1,18 @@
 const socket = io.connect();
 
+// Normalizacion de mensajes
+const authorSchema = new normalizr.schema.Entity("autor", {}, { idAttribute: "id" });
+const msjSchema = new normalizr.schema.Entity("mensaje", {author: authorSchema}, { idAttribute: "dateTime" });
+const postSchema= new normalizr.schema.Entity('post', { mensajes: [msjSchema] }, { idAttribute: 'id' })
+
 // ESCUCHA LA LISTA DE MENSAJES
-socket.on("message_rta", (data) => {
-    console.log(data);
-    render(data)
-    socket.emit("mensaje_cliente", "Mensajes actualizados")
+socket.on("message_rta_normlz", (data) => {
+    const denormlz = normalizr.denormalize(data.result, postSchema, data.entities);
+    // console.log(JSON.stringify(denormlz).length);
+    render(denormlz.mensajes)
+    socket.emit("mensaje_cliente", "Mensajes actualizados");
+    let compresion = JSON.stringify(data).length/JSON.stringify(denormlz).length*100
+    console.log(Math.round(compresion));
 })
 
 // FUNCION PARA RENDERIZAR LOS MENSAJES
