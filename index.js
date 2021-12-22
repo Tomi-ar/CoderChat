@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
 const router = require("./routes/productos");
+const faker = require("faker");
 const handlebars = require('express-handlebars');
 const fs = require("fs");
 var moment = require("moment")
+
+// Requiero para el normalizado
+// const { normalize, schema } = require('normalizr');
+// const dataMsg = require('./db/arrProds.txt');
 
 // Server
 const http = require("http")
@@ -33,14 +38,35 @@ const { Server } = require("socket.io")
 const io = new Server(server)
 app.use(express.static(__dirname+"/public"))
 
-//Conexion Socket
+// Crear la lista de productos con FAKER
+const createFaker = async () => {
+    let fakerArr = [];
+    
+    for (let i = 1; i < 6; i++) {
+    fakerArr.push({
+        id: i,
+        nombre: faker.commerce.productName(),
+        precio: faker.commerce.price(),
+        thumb: faker.image.image()
+    });
+};
+
+    await fs.writeFile("./db/arrProds.txt", JSON.stringify(fakerArr, null, 2), (err,data) =>{
+        console.log("Producto guardado!");
+    })
+}
+createFaker();
+
+// Normalizacion de mensajes
+
+//Conexion) Socket
 io.on("connection", (socket) => {
     console.log("Cliente conectado");
     fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
         let info = JSON.parse(data);
-        socket.emit("message_rta", info)
+        socket.emit("message_rta", info.mensajes)
     })
-    fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {
+    fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {        
         let info = JSON.parse(data);
         socket.emit("arrUpdated", info)
     })
@@ -48,6 +74,7 @@ io.on("connection", (socket) => {
     socket.on("dataText", (dataObj) => {
         fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
             let dataFile = JSON.parse(data);
+            let listaMensajes = dataFile.mensajes;
             let newDateTime = moment().format("DD/MM/YYYY HH:mm:ss");
             let newCom = {
                 author: {
@@ -62,14 +89,14 @@ io.on("connection", (socket) => {
                 dateTime: newDateTime
             }
 
-            dataFile.push(newCom);
-            console.log(dataFile);
-            fs.writeFile("./db/Comms.txt", JSON.stringify(dataFile), (err) => {
+            listaMensajes.push(newCom);
+            console.log(listaMensajes);
+            fs.writeFile("./db/Comms.txt", JSON.stringify(dataFile, null, 2), (err) => {
                 console.log("Comentario guardado");
 
                 // Aca tengo que normalizar la respuesta y enviarla de las dos formas.
 
-                io.sockets.emit("message_rta", dataFile)
+                io.sockets.emit("message_rta", dataFile.mensajes)
             })
         })
     })

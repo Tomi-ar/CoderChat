@@ -12,7 +12,9 @@
     "dependencies": {
         "express": "^4.17.1",
         "express-handlebars": "^5.3.4",
+        "faker": "^5.5.3",
         "moment": "^2.29.1",
+        "normalizr": "^3.6.1",
         "socket.io": "^4.3.2"
     },
     "devDependencies": {

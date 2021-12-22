@@ -14,7 +14,7 @@ const render = (data) => {
 
     let html = data.map(x => {
         return `<div class="comentarios">
-                    <p class="email">${x.author} </p>
+                    <p class="email">${x.author.id} </p>
                     <p class="date">[${x.dateTime}]: </p>
                     <p class="text">${x.text}</p>
                 </div>`

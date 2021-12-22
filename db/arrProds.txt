@@ -1,20 +1,32 @@
 [
   {
-    "nombre": "Riberão Lager",
-    "precio": "310",
-    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/11/colorado-ribeirao_600ml.png",
-    "id": "1"
+    "id": 1,
+    "nombre": "Practical Steel Towels",
+    "precio": "294.00",
+    "thumb": "http://placeimg.com/640/480/cats"
   },
   {
-    "nombre": "Ithaca",
-    "precio": "250",
-    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/03/colorado-ithaca_600ml.png",
-    "id": "2"
+    "id": 2,
+    "nombre": "Incredible Steel Chips",
+    "precio": "288.00",
+    "thumb": "http://placeimg.com/640/480/sports"
   },
   {
-    "nombre": "prueba1",
-    "precio": "1234",
-    "thumb": "https://www.ambev.com.br/conteudo/uploads/2019/03/colorado-ithaca_600ml.png",
-    "id": 3
+    "id": 3,
+    "nombre": "Tasty Cotton Pizza",
+    "precio": "596.00",
+    "thumb": "http://placeimg.com/640/480/transport"
+  },
+  {
+    "id": 4,
+    "nombre": "Practical Wooden Soap",
+    "precio": "196.00",
+    "thumb": "http://placeimg.com/640/480/abstract"
+  },
+  {
+    "id": 5,
+    "nombre": "Unbranded Metal Mouse",
+    "precio": "794.00",
+    "thumb": "http://placeimg.com/640/480/fashion"
   }
 ]
