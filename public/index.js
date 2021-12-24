@@ -13,7 +13,13 @@ socket.on("message_rta_normlz", (data) => {
     socket.emit("mensaje_cliente", "Mensajes actualizados");
     let compresion = JSON.stringify(data).length/JSON.stringify(denormlz).length*100
     console.log(Math.round(compresion));
+    print(Math.round(compresion))
 })
+
+const print = (x) => {
+    let result = `<h3 class="compresion">Compresion: ${x}%</h3>`
+    document.querySelector("#compresion").innerHTML = result
+}
 
 // FUNCION PARA RENDERIZAR LOS MENSAJES
 const render = (data) => {
