@@ -1,11 +1,12 @@
 const express = require('express');
 const { Router } = require('express');
 const fs = require("fs");
+const webAuth = require('../auth/authMiddlew');
 
 const router = new Router();
 
 router.get("/", (req, res) => {
-    res.render("productos")
+    res.render("productos", {login: req.session.login})
 })
 
 // router.post("/", (req, res) => {

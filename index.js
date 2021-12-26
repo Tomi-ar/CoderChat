@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
-const router = require("./routes/productos");
-const faker = require("faker");
+const router = require("./routes/productos/productos");
+const authLogin = require("./routes/auth/login");
 const handlebars = require('express-handlebars');
+const createFaker = require("./helpers/faker");
 const fs = require("fs");
 var moment = require("moment")
 
@@ -10,15 +11,28 @@ var moment = require("moment")
 const { normalize, schema } = require('normalizr');
 const dataMsg = require('./db/arrProds.txt');
 
+// Normalizacion de mensajes
+const authorSchema = new schema.Entity("autor", {}, { idAttribute: "id" });
+const msjSchema = new schema.Entity("mensaje", {author: authorSchema}, { idAttribute: "dateTime" });
+const postSchema= new schema.Entity('post', { mensajes: [msjSchema] }, { idAttribute: 'id' })
+
+
 // Server
 const http = require("http")
 const server = http.createServer(app)
 const port = process.env.PORT || 3003;
 
+// Socket
+const { Server } = require("socket.io");
+const io = new Server(server)
+app.use(express.static(__dirname+"/public"))
+
+
 // Para trabajar con form
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use("/productos", router)
+app.use("/", authLogin)
 
 // Motores de plantillas >> Hbs
 app.set("views", "./views")
@@ -33,34 +47,23 @@ app.engine(
     })
 )
 
-// Socket
-const { Server } = require("socket.io")
-const io = new Server(server)
-app.use(express.static(__dirname+"/public"))
 
-// Crear la lista de productos con FAKER
-const createFaker = async () => {
-    let fakerArr = [];
-    
-    for (let i = 1; i < 6; i++) {
-    fakerArr.push({
-        id: i,
-        nombre: faker.commerce.productName(),
-        precio: faker.commerce.price(),
-        thumb: faker.image.image()
-    });
-};
-
-    await fs.writeFile("./db/arrProds.txt", JSON.stringify(fakerArr, null, 2), (err,data) =>{
-        console.log("Producto guardado!");
-    })
-}
-createFaker();
-
-// Normalizacion de mensajes
-const authorSchema = new schema.Entity("autor", {}, { idAttribute: "id" });
-const msjSchema = new schema.Entity("mensaje", {author: authorSchema}, { idAttribute: "dateTime" });
-const postSchema= new schema.Entity('post', { mensajes: [msjSchema] }, { idAttribute: 'id' })
+// CONFIGURACION DEL SESSION
+const MongoStore = require("connect-mongo")
+const session = require("express-session")
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://Tomas:t4VMECAcMAvPYNN@ecommerceatlas.80zrg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+        mongoOptions: advancedOptions
+    }),
+    secret: "sunrise",
+    resave: true,
+    saveUninitialized: true,
+    // cookie: {
+    //     maxAge: 1000
+    // }
+}))
 
 
 //Conexion) Socket
@@ -69,10 +72,9 @@ io.on("connection", (socket) => {
     fs.readFile("./db/Comms.txt", "utf-8", (err,data) => {
         let info = JSON.parse(data);
         const normalized = normalize(info, postSchema);
-        // console.log(JSON.stringify(normalized).length);
-        // console.log(data.length)
         socket.emit("message_rta_normlz", normalized)
     })
+    createFaker();
     fs.readFile("./db/arrProds.txt", "utf-8", (err,data) => {        
         let info = JSON.parse(data);
         socket.emit("arrUpdated", info)
@@ -139,6 +141,21 @@ io.on("connection", (socket) => {
 app.get("/", (req, res) => {
     res.render("main")
 })
+
+// app.post("/login", (req, res) => {
+//     req.session.login = req.body.login
+//     console.log(req.session.login);
+//     res.redirect("/productos")
+// })
+
+// app.get("/login", (req, res) => {
+//     const user = req.session?.login
+//     if (user != undefined) {
+//         res.redirect('/productos')
+//     } else {
+//         res.render('login')
+//     }
+// })
 
 server.listen(port, () => {
     console.log("Server running on "+port);

@@ -8,7 +8,6 @@ const postSchema= new normalizr.schema.Entity('post', { mensajes: [msjSchema] },
 // ESCUCHA LA LISTA DE MENSAJES
 socket.on("message_rta_normlz", (data) => {
     const denormlz = normalizr.denormalize(data.result, postSchema, data.entities);
-    // console.log(JSON.stringify(denormlz).length);
     render(denormlz.mensajes)
     socket.emit("mensaje_cliente", "Mensajes actualizados");
     let compresion = JSON.stringify(data).length/JSON.stringify(denormlz).length*100
@@ -17,15 +16,13 @@ socket.on("message_rta_normlz", (data) => {
 })
 
 const print = (x) => {
-    let result = `<h3 class="compresion">Compresion: ${x}%</h3>`
-    document.querySelector("#compresion").innerHTML = result
+    document.querySelector("#compresion").innerHTML = `<h3 class="compresion">Compresion: ${x}%</h3>`
 }
 
 // FUNCION PARA RENDERIZAR LOS MENSAJES
 const render = (data) => {
 
     // Aca tengo que desnormalizar el objeto y representarlo - ademas compararlo con el otro formato.
-
     let html = data.map(x => {
         return `<div class="comentarios">
                     <p class="email">${x.author.id} </p>
@@ -91,3 +88,23 @@ const addProd = () => {
 
     return false;
 }
+
+// FUNCION PARA AGREGAR UN NUEVO USUARIO
+const newUser = () => {
+    let user = {
+        nombre: document.querySelector("#login").value
+    }
+    console.log(user);
+    socket.emit("userNew", user)
+    return false;
+}
+
+// LOGOUT
+const logout = (x) => {
+    document.querySelector("#logout").innerHTML = `<h3 class="compresion">Hasta luego ${x}%</h3>`
+}
+
+// USUARIO NUEVO
+// const userNew = (x) => {
+//     document.querySelector("#user").innerHTML = `<h3 class="saludo">Bienvenido ${x}%</h3>`
+// }
