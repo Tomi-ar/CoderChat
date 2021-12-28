@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const authLogin = new Router();
+const session = require("express-session")
 
 authLogin.get("/login", (req, res) => {
     const user = req.session?.login

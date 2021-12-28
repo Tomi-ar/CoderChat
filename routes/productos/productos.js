@@ -5,7 +5,7 @@ const webAuth = require('../auth/authMiddlew');
 
 const router = new Router();
 
-router.get("/", (req, res) => {
+router.get("/", webAuth, (req, res) => {
     res.render("productos", {login: req.session.login})
 })
 

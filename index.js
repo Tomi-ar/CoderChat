@@ -49,19 +49,20 @@ app.engine(
 
 
 // CONFIGURACION DEL SESSION
-const MongoStore = require("connect-mongo")
 const session = require("express-session")
+const MongoStore = require("connect-mongo")
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://Tomas:t4VMECAcMAvPYNN@ecommerceatlas.80zrg.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-        mongoOptions: advancedOptions
+        mongoUrl: "mongodb+srv://Tomas:af4ePHKstYwhx4v@ecommerceatlas.80zrg.mongodb.net/ecommerceAtlas?retryWrites=true&w=majority",
+        mongoOptions: advancedOptions,
+        collectionName: "sessions"
     }),
     secret: "sunrise",
     resave: true,
     saveUninitialized: true,
     // cookie: {
-    //     maxAge: 1000
+    //     maxAge: 100000
     // }
 }))
 
