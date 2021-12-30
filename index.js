@@ -32,7 +32,7 @@ app.use(express.static(__dirname+"/public"))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use("/productos", router)
-app.use("/", authLogin)
+// app.use("/", authLogin)
 
 // Motores de plantillas >> Hbs
 app.set("views", "./views")
@@ -50,20 +50,22 @@ app.engine(
 
 // CONFIGURACION DEL SESSION
 const session = require("express-session")
+const cookieParser = require("cookie-parser")
 const MongoStore = require("connect-mongo")
 const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
+app.use(cookieParser())
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://Tomas:af4ePHKstYwhx4v@ecommerceatlas.80zrg.mongodb.net/ecommerceAtlas?retryWrites=true&w=majority",
+        mongoUrl: "mongodb+srv://Tomas:t4VMECAcMAvPYNN@ecommerceatlas.80zrg.mongodb.net/ecommerceAtlas?retryWrites=true&w=majority",
         mongoOptions: advancedOptions,
         collectionName: "sessions"
     }),
     secret: "sunrise",
-    resave: true,
     saveUninitialized: true,
-    // cookie: {
-    //     maxAge: 100000
-    // }
+    resave: true,
+    cookie: {
+        maxAge: 100000
+    }
 }))
 
 
@@ -143,20 +145,26 @@ app.get("/", (req, res) => {
     res.render("main")
 })
 
-// app.post("/login", (req, res) => {
-//     req.session.login = req.body.login
-//     console.log(req.session.login);
-//     res.redirect("/productos")
-// })
+app.get("/login", (req, res) => {
+    const user = req.session?.login
+    if (user) {
+        res.redirect('/productos', {login: user})
+    } else {
+        res.render('login')
+    }
+})
 
-// app.get("/login", (req, res) => {
-//     const user = req.session?.login
-//     if (user != undefined) {
-//         res.redirect('/productos')
-//     } else {
-//         res.render('login')
-//     }
-// })
+app.post("/login", (req, res) => {
+    req.session.login = req.body.login;
+    console.log(req.body.login);
+    res.redirect("/productos")
+    // res.send(req.body.login)
+})
+
+app.get("/logout", (req, res) => {
+    res.render("logout")
+    // redirect a /login o /productos
+})
 
 server.listen(port, () => {
     console.log("Server running on "+port);
