@@ -162,8 +162,18 @@ app.post("/login", (req, res) => {
 })
 
 app.get("/logout", (req, res) => {
-    res.render("logout")
-    // redirect a /login o /productos
+    const nombre = req.session?.nombre
+    if (nombre) {
+        req.session.destroy(err => {
+            if (!err) {
+                res.render('logout', { nombre })
+            } else {
+                res.redirect('/')
+            }
+        })
+    } else {
+        res.redirect('/')
+    }
 })
 
 server.listen(port, () => {
